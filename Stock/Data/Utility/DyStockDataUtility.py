@@ -949,14 +949,14 @@ class DyStockDataUtility(object):
         progress.init(len(dfs), 100, 10)
 
         limitUpStats, nokLimitUpStats, totalCodeNbr = pd.Series(), pd.Series(), pd.Series()
-        for _, df in dfs.items():
+        for code, df in dfs.items():
             # 非停牌或者非上市股票计数
             totalCodeNbr = totalCodeNbr.add(df['volume'] > 0, fill_value=0)
 
             # 封板
             closeChange = df['close'].pct_change()
             closeChange = closeChange[df['high'] != df['low']]
-            boolCloseChange = closeChange > DyStockCommon.limitUpPct/100
+            boolCloseChange = closeChange > DyStockCommon.getLimitUpPct(code)/100
 
             limitUpStats = limitUpStats.add(boolCloseChange, fill_value=0)
 
@@ -964,7 +964,7 @@ class DyStockDataUtility(object):
             shiftClose = df['close'].shift(1)
             highChange = (df['high'] - shiftClose)/shiftClose
             highChange = highChange[df['high'] != df['low']]
-            boolHighChange = highChange > DyStockCommon.limitUpPct/100
+            boolHighChange = highChange > DyStockCommon.getLimitUpPct(code)/100
             boolHighChange = boolHighChange & -boolCloseChange
 
             nokLimitUpStats = nokLimitUpStats.add(boolHighChange, fill_value=0)

@@ -80,7 +80,7 @@ class DySS_LimitUpPredict(DyStockSelectStrategyTemplate):
             return None
 
         # 剔除涨停开盘
-        if (open - preClose)/preClose*100 >= DyStockCommon.limitUpPct:
+        if (open - preClose)/preClose*100 >= DyStockCommon.getLimitUpPct(code):
             return None
 
         # save
@@ -126,7 +126,7 @@ class DySS_LimitUpPredict(DyStockSelectStrategyTemplate):
         df = df[-22:-1]
         closePctChange = df['close'].pct_change()
 
-        limitUpBool = closePctChange >= DyStockCommon.limitUpPct/100
+        limitUpBool = closePctChange >= DyStockCommon.getLimitUpPct(code)/100
         limitUpNbr = limitUpBool.sum()
 
         if limitUpNbr > self._preLimitUpNbr:

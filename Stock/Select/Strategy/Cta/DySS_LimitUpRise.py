@@ -36,10 +36,10 @@ class DySS_LimitUpRise(DyStockSelectStrategyTemplate):
         closePctChange = df['close'].pct_change().dropna()
         if closePctChange.shape[0] != 30: return
 
-        if closePctChange[-2] < DyStockCommon.limitUpPct/100: return
+        if closePctChange[-2] < DyStockCommon.getLimitUpPct(code)/100: return
         if closePctChange[-1] <= 0: return
 
-        if (closePctChange >= DyStockCommon.limitUpPct/100).sum() > 1: return
+        if (closePctChange >= DyStockCommon.getLimitUpPct(code)/100).sum() > 1: return
 
         if df.ix[-1, 'turn']/df.ix[-2, 'turn'] >= 2: return
 

@@ -87,7 +87,7 @@ class DySS_LimitUpAnalysis(DyStockSelectStrategyTemplate):
 
         self._indexDataDict[code] = closeMaPos
 
-    def _isValidLimitUp(self, df):
+    def _isValidLimitUp(self, df, code=None):
         """
             是否是当日涨停
         """
@@ -99,15 +99,15 @@ class DySS_LimitUpAnalysis(DyStockSelectStrategyTemplate):
         high = df.ix[-1, 'high']
 
         if self._oklimitUp and self._noklimitUp:
-            if not (high - preClose)/preClose*100 >= DyStockCommon.limitUpPct:
+            if not (high - preClose)/preClose*100 >= DyStockCommon.getLimitUpPct(code):
                 return False
 
         elif self._oklimitUp:
-            if not ((high - preClose)/preClose*100 >= DyStockCommon.limitUpPct and close == high):
+            if not ((high - preClose)/preClose*100 >= DyStockCommon.getLimitUpPct(code) and close == high):
                 return False
 
         elif self._noklimitUp:
-            if not ((high - preClose)/preClose*100 >= DyStockCommon.limitUpPct and close != high):
+            if not ((high - preClose)/preClose*100 >= DyStockCommon.getLimitUpPct(code) and close != high):
                 return False
         else:
             return False
@@ -166,13 +166,13 @@ class DySS_LimitUpAnalysis(DyStockSelectStrategyTemplate):
 
         return rsi[-2]
 
-    def _countPreLimitUp(self, df):
+    def _countPreLimitUp(self, df, code=None):
         """
             N周期日的涨停数（不含当日涨停），涨停间隔周期的均值
         """
         closePctChange = df['close'].pct_change()
 
-        limitUpBool = closePctChange >= DyStockCommon.limitUpPct/100
+        limitUpBool = closePctChange >= DyStockCommon.getLimitUpPct(code)/100
         limitUpNbr = limitUpBool.sum()
         if limitUpBool[-1]: # 剔除当日涨停
             limitUpNbr -= 1
@@ -345,7 +345,7 @@ class DySS_LimitUpAnalysis(DyStockSelectStrategyTemplate):
     ###################################################################################################################
     ###################################################################################################################
     def onStockDays(self, code, df):
-        if not self._isValidLimitUp(df):
+        if not self._isValidLimitUp(df, code):
             return
 
         openRatio = (df.ix[-1, 'open'] - df.ix[-2, 'close'])/df.ix[-2, 'close']*100
@@ -358,7 +358,7 @@ class DySS_LimitUpAnalysis(DyStockSelectStrategyTemplate):
 
         preRsi = self._preRsi(df)
 
-        limitUpNbr, limitUpIntervalMean = self._countPreLimitUp(df)
+        limitUpNbr, limitUpIntervalMean = self._countPreLimitUp(df, code)
 
         breakoutCount, peaksNbr = self._countBreakoutPeaks(df)
 

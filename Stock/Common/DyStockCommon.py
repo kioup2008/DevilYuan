@@ -55,6 +55,28 @@ class DyStockCommon(object):
     # 北交所涨跌停限制（30%）
     bjLimitUpPct = 29.962
     bjLimitDownPct = -29.962
+    @staticmethod
+    def getLimitUpPct(code):
+        """根据股票代码返回对应市场的涨停阈值(%)"""
+        if code[-2:] == 'BJ' or code[:3] == '920' or code[0] == '8':
+            return DyStockCommon.bjLimitUpPct
+        return DyStockCommon.limitUpPct
+
+    @staticmethod
+    def getLimitDownPct(code):
+        """根据股票代码返回对应市场的跌停阈值(%)"""
+        if code[-2:] == 'BJ' or code[:3] == '920' or code[0] == '8':
+            return DyStockCommon.bjLimitDownPct
+        return DyStockCommon.limitDownPct
+
+    @staticmethod
+    def isCodeBSE(code):
+        """判断是否为北交所股票"""
+        if code[-2:] == 'BJ':
+            return True
+        if code[:3] == '920' or code[0] == '8':
+            return True
+        return False
 
     # Devil启动时从配置文件读入，这个配置在Stock模块里共享。默认是Efinance
     defaultHistDaysDataSource = ['Efinance'] # Efinance，如果数据源是两个或者以上，则数据相互做验证。单个则不做验证。这里包括验证交易日数据，股票代码表和日线数据。

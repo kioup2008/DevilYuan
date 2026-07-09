@@ -225,10 +225,10 @@ class DyStockBackTestingAccountManager:
         self._processDealedEntrusts(dealedEntrusts, ticks)
 
     def _isBarLimitDown(self, bar):
-        return bar.low == bar.high and (bar.low - bar.preClose)/bar.preClose*100 <= DyStockCommon.limitDownPct
+        return bar.low == bar.high and (bar.low - bar.preClose)/bar.preClose*100 <= DyStockCommon.getLimitDownPct(bar.code)
 
     def _isBarLimitUp(self, bar):
-        return bar.low == bar.high and (bar.high - bar.preClose)/bar.preClose*100 >= DyStockCommon.limitUpPct
+        return bar.low == bar.high and (bar.high - bar.preClose)/bar.preClose*100 >= DyStockCommon.getLimitUpPct(bar.code)
 
     def _CrossCurNotDoneEntrustsByBars(self, bars):
         """
@@ -244,10 +244,10 @@ class DyStockBackTestingAccountManager:
 
             if bar.mode[-1] == 'd': # 日线回测，直接撮合，2017.11.09
                 if entrust.type == DyStockOpType.buy:
-                    if (bar.close - bar.preClose)/bar.preClose*100 < DyStockCommon.limitUpPct: # 涨停则不买入
+                    if (bar.close - bar.preClose)/bar.preClose*100 < DyStockCommon.getLimitUpPct(entrust.code): # 涨停则不买入
                         dealedEntrusts.append(entrust)
                 else:
-                    if (bar.close - bar.preClose)/bar.preClose*100 > DyStockCommon.limitDownPct: # 跌停则不卖出
+                    if (bar.close - bar.preClose)/bar.preClose*100 > DyStockCommon.getLimitDownPct(entrust.code): # 跌停则不卖出
                         dealedEntrusts.append(entrust)
 
             else: # 分钟回测，穿价撮合

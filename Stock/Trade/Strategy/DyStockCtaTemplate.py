@@ -688,7 +688,7 @@ class DyStockCtaTemplate(object):
             return False
 
         if tick.askPrices is None: # 回测
-            if (tick.price - tick.preClose)/tick.preClose*100 >= DyStockCommon.limitUpPct:
+            if (tick.price - tick.preClose)/tick.preClose*100 >= DyStockCommon.getLimitUpPct(tick.code):
                 return False
 
         else: # 实盘

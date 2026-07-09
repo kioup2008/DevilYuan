@@ -383,12 +383,12 @@ class DyST_MaWalk(DyStockCtaTemplate):
                 continue
 
             # 无跌停
-            if (df['close'][-DyST_MaWalk.closeUpWalkMaNDays-1:].pct_change().dropna() <= DyStockCommon.limitDownPct/100).sum() > 0:
+            if (df['close'][-DyST_MaWalk.closeUpWalkMaNDays-1:].pct_change().dropna() <= DyStockCommon.getLimitDownPct(code)/100).sum() > 0:
                 progress.update()
                 continue
 
             # 无涨停
-            if (df['close'][-DyST_MaWalk.closeUpWalkMaNDays-1:].pct_change().dropna() >= DyStockCommon.limitUpPct/100).sum() > 0:
+            if (df['close'][-DyST_MaWalk.closeUpWalkMaNDays-1:].pct_change().dropna() >= DyStockCommon.getLimitUpPct(code)/100).sum() > 0:
                 progress.update()
                 continue
 

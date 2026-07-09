@@ -39,7 +39,7 @@ class DySS_LimitUp(DyStockSelectStrategyTemplate):
         if closePctChange.shape[0] < self._maxLimitUpNbr:
             return
 
-        limitUpBool = closePctChange >= DyStockCommon.limitUpPct/100
+        limitUpBool = closePctChange >= DyStockCommon.getLimitUpPct(code)/100
         limitUpNbr = int(limitUpBool.sum())
         if limitUpNbr == 0:
             return
