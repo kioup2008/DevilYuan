@@ -63,7 +63,7 @@ class DyStockTradeCommon:
         """
         stampTax = price*volume*0.001 if type == DyStockOpType.sell else 0
 
-        transferFee = (volume + 999)//1000 if code[0] in ['6', '5'] else 0
+        transferFee = (volume + 999)//1000 if code[0] in ['6', '5'] or code[:3] == '920' or code[0] == '8' else 0
 
         # 指数基金没有印花税和过户费
         if code in DyStockCommon.funds:
