@@ -103,13 +103,13 @@ class DyStockSinaQuotation(object):
     def get(self):
         return self._get_stock_data(self._stockList)
 
-    @asyncio.coroutine
+    async
     def _get_stocks_by_range_with_proxy(self, i, params):
         response_text = urllib.request.urlopen(self.stock_api + params).read().decode('GBK')
 
         return response_text
 
-    @asyncio.coroutine
+    async
     def _get_stocks_by_range(self, i, params):
         # create HTTP sessions when @self._stockList changed
         if len(self._sessions) != len(self._stockList):
@@ -120,8 +120,8 @@ class DyStockSinaQuotation(object):
 
         session = self._sessions[i]
 
-        r = yield from session.get(self.stock_api + params, timeout=1)
-        response_text = yield from r.text()
+        r = await session.get(self.stock_api + params, timeout=5)
+        response_text = await r.text()
 
         return response_text
 
