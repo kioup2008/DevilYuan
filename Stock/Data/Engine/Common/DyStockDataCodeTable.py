@@ -138,10 +138,11 @@ class DyStockDataCodeTable:
 
     def getIndex(self, code):
         if code[-2:] == 'SH': return self.shIndex
+        if code[-2:] == 'BJ': return self.bjIndex
 
         if code[:3] == '002': return self.zxbIndex
         if code[:3] == '300': return self.cybIndex
-            
+
         if code[-2:] == 'SZ': return self.szIndex
 
         assert(0)

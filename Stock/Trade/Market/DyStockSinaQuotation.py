@@ -21,6 +21,7 @@ class DyStockSinaQuotation(object):
     cybzSinaIndex = 'sz399102'
     zxbSinaIndex = 'sz399005'
     zxbzSinaIndex = 'sz399101'
+    bjSinaIndex = 'bj899050'
 
 
     def __init__(self, eventEngine, info):
@@ -40,9 +41,6 @@ class DyStockSinaQuotation(object):
         self._sessions = []
 
     def _enableProxyHandler(self, event):
-        # Note: Should start proxy firstly, it's much tricky that this flag is updated by other hand, not stockSianQuotation hand.
-        # The situation is that if without proxy, it will take some time for http visiting failed.
-        # During that time, 1s timer event will be cumulated at stockSianQuotation hand queue so that Ui event cannot be handled on time.
         if event.data:
             proxy_support = urllib.request.ProxyHandler({'http': 'x.x.x.x:8000'})
             opener = urllib.request.build_opener(proxy_support)
@@ -70,16 +68,34 @@ class DyStockSinaQuotation(object):
         for i in range(0, len(allStocks), self.maxNum):
             self._stockList.append(','.join(allStocks[i:i + self.maxNum]))
 
+    @staticmethod
+    def _codeToSinaPrefix(code):
+        """Convert DyStock code (e.g. 000001.SH) to Sina prefix (sh/sz/bj)"""
+        if code[-2:] == 'BJ':
+            return 'bj'
+        if code.startswith(('5', '6', '9')):
+            return 'sh'
+        return 'sz'
+
+    @staticmethod
+    def _indexToSinaPrefix(code):
+        """Convert index code to Sina prefix"""
+        if code[-2:] == 'BJ':
+            return 'bj'
+        if code.startswith(('0')):
+            return 'sh'
+        return 'sz'
+
     def addIndexes(self, indexes):
         indexes = list(
-                map(lambda index: ('sh%s' if index.startswith(('0')) else 'sz%s') % index[:-3],
+                map(lambda index: (DyStockSinaQuotation._indexToSinaPrefix(index) + index[:-3]),
                     indexes))
 
         self._add2List(indexes)
 
     def add(self, stockCodes):
         sinaStocks = list(
-                map(lambda stockCode: ('sh%s' if stockCode.startswith(('5', '6', '9')) else 'sz%s') % stockCode[:-3],
+                map(lambda stockCode: (DyStockSinaQuotation._codeToSinaPrefix(stockCode) + stockCode[:-3]),
                     stockCodes))
 
         self._add2List(sinaStocks)
@@ -148,12 +164,12 @@ class DyStockSinaQuotation(object):
                     now=float(stock[4]),
                     high=float(stock[5]),
                     low=float(stock[6]),
-                    buy=float(stock[7]), # 竞买价，即“买一”报价
-                    sell=float(stock[8]), # 竞卖价，即“卖一”报价
+                    buy=float(stock[7]), # 竞买价，即"买一"报价
+                    sell=float(stock[8]), # 竞卖价，即"卖一"报价
                     volume=int(stock[9]), # 今日累计成交的股票数，由于股票交易以一百股为基本单位，所以在使用时，通常把该值除以一百
-                    amount=float(stock[10]), # 今日累计成交金额，单位为“元”，为了一目了然，通常以“万元”为成交金额的单位，所以通常把该值除以一万
-                    bid1_volume=int(stock[11]), # “买一”申请股数
-                    bid1=float(stock[12]), # “买一”报价
+                    amount=float(stock[10]), # 今日累计成交金额，单位为"元"，为了一目了然，通常以"万元"为成交金额的单位，所以通常把该值除以一万
+                    bid1_volume=int(stock[11]), # "买一"申请股数
+                    bid1=float(stock[12]), # "买一"报价
                     bid2_volume=int(stock[13]),
                     bid2=float(stock[14]),
                     bid3_volume=int(stock[15]),
@@ -162,8 +178,8 @@ class DyStockSinaQuotation(object):
                     bid4=float(stock[18]),
                     bid5_volume=int(stock[19]),
                     bid5=float(stock[20]),
-                    ask1_volume=int(stock[21]), # “卖一”申报股数
-                    ask1=float(stock[22]), # “卖一”报价
+                    ask1_volume=int(stock[21]), # "卖一"申报股数
+                    ask1=float(stock[22]), # "卖一"报价
                     ask2_volume=int(stock[23]),
                     ask2=float(stock[24]),
                     ask3_volume=int(stock[25]),

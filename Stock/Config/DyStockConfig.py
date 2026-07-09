@@ -26,6 +26,12 @@ class DyStockConfig(object):
                               'tradeDayTableName': "tradeDayTableTuShare",
                               'codeTableName': "codeTableTuShare",
                               'stockDaysDb': 'stockDaysDbTuShare'
+                          },
+                          "Efinance": {
+                              "stockCommonDb": 'stockCommonDb',
+                              'tradeDayTableName': "tradeDayTable",
+                              'codeTableName': "codeTable",
+                              'stockDaysDb': 'stockDaysDb'
                               }
                           },
                       "Ticks": {"db": 'stockTicksDb'}
@@ -42,7 +48,7 @@ class DyStockConfig(object):
         if DyStockCommon.WindPyInstalled:
             return {"Wind": True, "TuShare": False}
 
-        return {"Wind": False, "TuShare": True}
+        return {"Wind": False, "TuShare": False, "Efinance": True}
 
     def _configStockHistDaysDataSource():
         path = DyCommon.createPath('Stock/User/Config/Common')
@@ -63,6 +69,8 @@ class DyStockConfig(object):
             DyStockCommon.defaultHistDaysDataSource.append('Wind')
 
         if data.get('TuShare'):
+        if data.get('Efinance'):
+            DyStockCommon.defaultHistDaysDataSource.append('Efinance')
             DyStockCommon.defaultHistDaysDataSource.append('TuShare')
 
     def getStockHistDaysDataSourceFileName():
@@ -159,4 +167,4 @@ class DyStockConfig(object):
         DyStockConfig._configStockHistDaysDataSource()
         DyStockConfig._configStockMongoDb()
         DyStockConfig._configStockWxScKey()
-        DyStockConfig._configStockAccount()
+        DyStockConfig._configStockAccount()

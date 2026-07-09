@@ -8,6 +8,7 @@ class DyStockCommon(object):
                         ('399001.SZ', '深证成指'),
                         ('399006.SZ', '创业板指'),
                         ('399005.SZ', '中小板指'),
+                        ('899050.BJ', '北证50'),
                         ])
 
     funds = {'510050.SH': '50ETF',
@@ -30,6 +31,7 @@ class DyStockCommon(object):
     szIndex = '399001.SZ'
     cybIndex = '399006.SZ'
     zxbIndex = '399005.SZ'
+    bjIndex = '899050.BJ'   # 北证50
 
     #!!! 综指是全市场所有的股票，上面四个则不是。
     # 创小板，同花顺做了调整，统一是用的所对应板的全市场的股票成交额。
@@ -50,15 +52,19 @@ class DyStockCommon(object):
     limitUpPct = 9.946 # 涨停时的涨幅(%), >=
     limitDownPct = -9.946 # 跌停时的涨幅(%), <=
 
-    # Devil启动时从配置文件读入，这个配置在Stock模块里共享。默认是Wind
-    defaultHistDaysDataSource = ['Wind'] # Wind and TuShare，如果数据源是两个或者以上，则数据相互做验证。单个则不做验证。这里包括验证交易日数据，股票代码表和日线数据。
-    WindPyInstalled = True    
+    # 北交所涨跌停限制（30%）
+    bjLimitUpPct = 29.962
+    bjLimitDownPct = -29.962
+
+    # Devil启动时从配置文件读入，这个配置在Stock模块里共享。默认是Efinance
+    defaultHistDaysDataSource = ['Efinance'] # Efinance，如果数据源是两个或者以上，则数据相互做验证。单个则不做验证。这里包括验证交易日数据，股票代码表和日线数据。
+    WindPyInstalled = False    
 
     # 同花顺个股资料（F10）link
     jqkaStockF10Link = 'http://basic.10jqka.com.cn/{}/'
 
     # 仿浏览器的HTTP、HTTPS的请求头部
-    requestHeaders = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+    requestHeaders = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'}
 
 
     def getIndexByName(indexName):
@@ -87,11 +93,16 @@ class DyStockCommon(object):
             获取个股对应的大盘指数
         """
         if code[-2:] == 'SH': return DyStockCommon.shIndex
+        if code[-2:] == 'BJ': return DyStockCommon.bjIndex
 
         if code[:3] == '002': return DyStockCommon.zxbIndex
         if code[:3] == '300': return DyStockCommon.cybIndex
             
         if code[-2:] == 'SZ': return DyStockCommon.szIndex
+
+        # 北交所
+        if code[-2:] == 'BJ' or code[:3] == '920' or code[0] == '8':
+            return DyStockCommon.bjIndex
 
         assert(0)
         return None
@@ -104,6 +115,10 @@ class DyStockCommon(object):
 
         if code[:3] == '002': return DyStockCommon.etf500
         if code[:3] == '300': return DyStockCommon.etf500
+
+        # 北交所个股对应500ETF
+        if code[-2:] == 'BJ' or code[:3] == '920' or code[0] == '8':
+            return DyStockCommon.etf500
             
         if code[-2:] == 'SZ': return DyStockCommon.etf500
 
@@ -111,6 +126,8 @@ class DyStockCommon(object):
         return None
 
     def getDyStockCode(code):
+        if code[:3] == '920' or code[0] == '8':
+            return code[:6] + '.BJ'
         return (code[:6] + '.SH') if code[0] in ['6', '5'] else (code[:6] + '.SZ')
 
     def getDyStockCodes(codes):

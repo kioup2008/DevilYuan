@@ -23,6 +23,7 @@ class DyStockHistDaysDataSourceConfigDlg(QDialog):
 
         self._windCheckBox = QCheckBox('Wind')
         self._tuShareCheckBox = QCheckBox('TuShare')
+        self._efinanceCheckBox = QCheckBox('Efinance')
 
         description = """只选一个：更新交易日数据，股票代码表和股票历史日线数据到对应的数据库
 
@@ -46,7 +47,8 @@ class DyStockHistDaysDataSourceConfigDlg(QDialog):
         grid.addWidget(label, 0, 0)
         grid.addWidget(self._windCheckBox, 1, 0)
         grid.addWidget(self._tuShareCheckBox, 2, 0)
-        grid.addWidget(textEdit, 3, 0)
+        grid.addWidget(self._efinanceCheckBox, 3, 0)
+        grid.addWidget(textEdit, 4, 0)
 
         grid.addWidget(okPushButton, 0, 1)
         grid.addWidget(cancelPushButton, 1, 1)
@@ -94,4 +96,4 @@ class DyStockHistDaysDataSourceConfigDlg(QDialog):
         self.accept()
 
     def _cancel(self):
-        self.reject()
+        self.reject()
