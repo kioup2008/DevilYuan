@@ -15,7 +15,7 @@ class DyStockSinaQuotation(object):
 
     maxNum = 800
     grep_detail = re.compile(r'(\w+)=([^\s][^,]+?)%s%s' % (r',([\.\d]+)' * 29, r',([-\.\d:]+)' * 2))
-    stock_api = 'http://hq.sinajs.cn/?format=text&list='
+    stock_api = 'https://hq.sinajs.cn/?format=text&list='
 
     cybSinaIndex = 'sz399006'
     cybzSinaIndex = 'sz399102'
