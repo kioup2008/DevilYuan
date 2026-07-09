@@ -55,18 +55,41 @@ class DyStockCommon(object):
     # 北交所涨跌停限制（30%）
     bjLimitUpPct = 29.962
     bjLimitDownPct = -29.962
+n    # 创业板涨跌停限制（20%）
+    cybLimitUpPct = 19.958
+    cybLimitDownPct = -19.958
+
+    # 科创板涨跌停限制（20%）
+    kcbLimitUpPct = 19.958
+    kcbLimitDownPct = -19.958
     @staticmethod
     def getLimitUpPct(code):
         """根据股票代码返回对应市场的涨停阈值(%)"""
+        # 北交所: 30%
         if code[-2:] == 'BJ' or code[:3] == '920' or code[0] == '8':
             return DyStockCommon.bjLimitUpPct
+        # 创业板(300xxx): 20%
+        if code[:3] == '300':
+            return DyStockCommon.cybLimitUpPct
+        # 科创板(688xxx): 20%
+        if code[:3] == '688':
+            return DyStockCommon.kcbLimitUpPct
+        # 沪深主板: 10%
         return DyStockCommon.limitUpPct
 
     @staticmethod
     def getLimitDownPct(code):
         """根据股票代码返回对应市场的跌停阈值(%)"""
+        # 北交所: 30%
         if code[-2:] == 'BJ' or code[:3] == '920' or code[0] == '8':
             return DyStockCommon.bjLimitDownPct
+        # 创业板(300xxx): 20%
+        if code[:3] == '300':
+            return DyStockCommon.cybLimitDownPct
+        # 科创板(688xxx): 20%
+        if code[:3] == '688':
+            return DyStockCommon.kcbLimitDownPct
+        # 沪深主板: 10%
         return DyStockCommon.limitDownPct
 
     @staticmethod
