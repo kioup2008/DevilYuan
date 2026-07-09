@@ -302,9 +302,9 @@ class DyStockDataGateway(object):
         self._info = info
 
         if DyStockCommon.WindPyInstalled:
-        # efinance 作为免费数据源，无需 token，支持沪深北
-        self._efinance = DyStockDataEfinance(self._info)
+
             self._wind = DyStockDataWind(self._info)
+        self._efinance = DyStockDataEfinance(self._info)
 
         if registerEvent:
             self._registerEvent()
@@ -376,6 +376,9 @@ class DyStockDataGateway(object):
         return codes
 
     def getSectorStockCodes(self, sectorCode, startDate, endDate):
+        if not DyStockCommon.WindPyInstalled:
+            self._info.print("Wind未安装，无法获取板块成分股", DyLogData.error)
+            return None
         return self._wind.getSectorStockCodes(sectorCode, startDate, endDate)
 
     def getDays(self, code, startDate, endDate, fields, name=None):
