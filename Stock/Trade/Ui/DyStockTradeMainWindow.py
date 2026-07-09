@@ -100,7 +100,7 @@ class DyStockTradeMainWindow(DyBasicMainWindow):
         toolBar = self.addToolBar('工具栏')
         toolBar.setObjectName('工具栏')
 
-        # WeChat
+        # 通知推送
         self._wxAction = QAction('开启微信提醒', self)
         self._wxAction.triggered.connect(self._wxAct)
         toolBar.addAction(self._wxAction)
@@ -292,21 +292,21 @@ class DyStockTradeMainWindow(DyBasicMainWindow):
             self._wxAction.setText('停止微信提醒')
 
             # put event
-            event = DyEvent(DyEventType.startStockWx)
+            event = DyEvent(DyEventType.startStockNotify)
             self._mainEngine.eventEngine.put(event)
 
         else:
             self._wxAction.setText('开启微信提醒')
 
             # put event
-            event = DyEvent(DyEventType.stopStockWx)
+            event = DyEvent(DyEventType.stopStockNotify)
             self._mainEngine.eventEngine.put(event)
 
     def _wxTestAct(self):
         text = '测试消息:\n{0}'.format(datetime.now())
 
         # put event
-        event = DyEvent(DyEventType.sendStockTestWx)
+        event = DyEvent(DyEventType.sendStockTestNotify)
         event.data = text
 
         self._mainEngine.eventEngine.put(event)

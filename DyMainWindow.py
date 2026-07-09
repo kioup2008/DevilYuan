@@ -23,7 +23,7 @@ from Stock.Select.Ui.DyStockSelectMainWindow import DyStockSelectMainWindow
 from Stock.Config.DyStockConfig import DyStockConfig
 from Stock.Config.DyStockHistDaysDataSourceConfigDlg import DyStockHistDaysDataSourceConfigDlg
 from Stock.Config.DyStockMongoDbConfigDlg import DyStockMongoDbConfigDlg
-from Stock.Config.Trade.DyStockWxScKeyConfigDlg import DyStockWxScKeyConfigDlg
+from Stock.Config.Trade.DyStockNotifyConfigDlg import DyStockNotifyConfigDlg
 from Stock.Config.Trade.DyStockAccountConfigDlg import DyStockAccountConfigDlg
 
 
@@ -165,7 +165,7 @@ class DyMainWindow(QMainWindow, Ui_MainWindow):
         DyStockMongoDbConfigDlg().exec_()
 
     def _configWx(self):
-        DyStockWxScKeyConfigDlg().exec_()
+        DyStockNotifyConfigDlg().exec_()
 
     def _configAccount(self):
         DyStockAccountConfigDlg().exec_()

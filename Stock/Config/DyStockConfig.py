@@ -4,7 +4,7 @@ import json
 from DyCommon.DyCommon import DyCommon
 from Stock.Common.DyStockCommon import DyStockCommon
 from ..Data.Engine.DyStockMongoDbEngine import DyStockMongoDbEngine
-from ..Trade.WeChat.DyStockTradeWxEngine import DyStockTradeWxEngine
+from ..Trade.Notify.DyStockTradeNotifyEngine import DyStockNotifyEngine
 from ..Trade.Broker.YhNew.YhTrader import YhTrader
 
 
@@ -37,7 +37,7 @@ class DyStockConfig(object):
                       "Ticks": {"db": 'stockTicksDb'}
                       }
 
-    defaultWxScKey = {"WxScKey": ""}
+    defaultNotify = {"feishuWebhookUrl": "", "wechatWorkWebhookUrl": ""}
 
     defaultAccount = {"Ths": {"Account": "", "Password": "", "Exe": r"C:\Program Files\同花顺\xiadan.exe"},
                       "Yh": {"Account": "", "Password": "", "Exe": r"C:\Program Files\中国银河证券双子星3.2\Binarystar.exe"},
@@ -119,24 +119,27 @@ class DyStockConfig(object):
 
         return file
 
-    def _configStockWxScKey():
-        file = DyStockConfig.getStockWxScKeyFileName()
+    def _configStockNotify():
+        path = DyCommon.createPath('Stock/User/Config/Trade')
+        file = os.path.join(path, 'DyStockNotify.json')
 
-        # open
         try:
-            with open(file) as f:
+            with open(file, encoding='utf-8') as f:
                 data = json.load(f)
         except:
-            data = DyStockConfig.defaultWxScKey
+            data = DyStockConfig.defaultNotify
 
-        DyStockConfig.configStockWxScKey(data)
+        DyStockConfig.configStockNotify(data)
 
-    def configStockWxScKey(data):
-        DyStockTradeWxEngine.scKey = data["WxScKey"]
+    def configStockNotify(data):
+        DyStockNotifyEngine.feishuWebhookUrl = data.get('feishuWebhookUrl', '')
+        DyStockNotifyEngine.wechatWorkWebhookUrl = data.get('wechatWorkWebhookUrl', '')
 
-    def getStockWxScKeyFileName():
+    def getStockNotifyFileName():
         path = DyCommon.createPath('Stock/User/Config/Trade')
-        file = os.path.join(path, 'DyStockWxScKey.json')
+        file = os.path.join(path, 'DyStockNotify.json')
+
+        return file
 
         return file
 
@@ -166,5 +169,5 @@ class DyStockConfig(object):
     def config():
         DyStockConfig._configStockHistDaysDataSource()
         DyStockConfig._configStockMongoDb()
-        DyStockConfig._configStockWxScKey()
+        DyStockConfig._configStockNotify()
         DyStockConfig._configStockAccount()

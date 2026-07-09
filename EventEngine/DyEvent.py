@@ -72,11 +72,13 @@ class DyEventType:
     qqQueryStockStrategy = 'eQqQueryStockStrategy' # QQ查询股票策略实时信息
 
     # WeChat related
-    startStockWx = 'eStartStockWx' # 开始微信提醒
-    stopStockWx = 'eStopStockWx' # 停止微信提醒
+    startStockWx = 'eStartStockWx'  # 已弃用，保留兼容 # 开始微信提醒
+    stopStockWx = 'eStopStockWx'  # 已弃用，保留兼容 # 停止微信提醒
 
-    sendStockTestWx = 'eSendStockTestWx' # 发送股票测试微信
-    wxQueryStockStrategy = 'eWxQueryStockStrategy' # 微信查询股票策略实时信息
+n    # 通知推送（替代旧版微信推送）
+    startStockNotify = 'eStartStockNotify'
+    stopStockNotify = 'eStopStockNotify'
+    sendStockTestNotify = 'eSendStockTestNotify'
 
     # RPC
     startStockRpc = 'eStartStockRpc' # 开始RPC

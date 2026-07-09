@@ -6,7 +6,7 @@ class DyStockTradeEventHandType:
     stockSinaQuotation = 1
     brokerEngine = 2
     #qqMsgEngine = 3
-    wxEngine = 3
+    notifyEngine = 3
     #rpcEngine = 4
 
     other = 4

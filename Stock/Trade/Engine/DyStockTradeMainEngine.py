@@ -9,7 +9,7 @@ from ..Strategy.DyStockCtaEngine import *
 from ..Broker.DyStockTradeBrokerEngine import *
 from ...Data.Engine.DyStockDataEngine import *
 #from ..QQ.DyStockTradeQQMsgEngine import *
-from ..WeChat.DyStockTradeWxEngine import *
+from ..Notify.DyStockTradeNotifyEngine import DyStockNotifyEngine
 #from ..Rpc.DyStockTradeRpcEngine import DyStockTradeRpcEngine
 
 
@@ -33,7 +33,7 @@ class DyStockTradeMainEngine(object):
         #self._QQMsgEngine = DyStockTradeQQMsgEngine(self._eventEngine, self._info)
 
         # 微信
-        self._wxEngine = DyStockTradeWxEngine(self._eventEngine, self._info)
+        self._notifyEngine = DyStockNotifyEngine(self._eventEngine, self._info)
 
         # RPC
         #self._rpcEngine = DyStockTradeRpcEngine(self._eventEngine, self._info)
